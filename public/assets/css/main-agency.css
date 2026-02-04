@@ -1,193 +1,374 @@
-/* ===============================
-   🎨 VARIABLES DE DISEÑO (NUEVO)
-   =============================== */
+/* public/css/estilos.css */
+
 :root {
-    --primary: #2563eb;
-    --secondary: #0ea5e9;
-    --accent: #fb7185;
-    --dark: #0f172a;
-    --muted: #64748b;
-    --bg: #f1f5f9;
-    --card-bg: #ffffff;
-
-    --radius-sm: 10px;
-    --radius-md: 16px;
-
-    --shadow-sm: 0 4px 12px rgba(0,0,0,0.06);
-    --shadow-md: 0 14px 30px rgba(0,0,0,0.12);
+    --primary: #007BFF;
+    --secondary: #FF6B6B;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --glass: rgba(255, 255, 255, 0.95);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --radius-lg: 20px;
+    --radius-pill: 50px;
 }
 
-/* ===============================
-   🌍 BASE
-   =============================== */
-body {
-    background-color: var(--bg);
-    color: var(--dark);
-    font-family: 'Inter', system-ui, sans-serif;
-    line-height: 1.6;
+/* --- HERO SECTION --- */
+.hero-header {
+    height: 400px; /* Altura de la cabecera */
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), 
+                url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=1421&q=80');
+    background-size: cover;
+    background-position: center;
+    border-radius: 0 0 30px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    margin-bottom: 4rem;
+    position: relative;
 }
 
-footer {
-    width: 100%;
-    margin-top: 4rem;
-}
-
-/* ===============================
-   🚀 NAVBAR
-   =============================== */
-.navbar {
-    background-color: #fff;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.navbar-brand {
-    font-size: 1.6rem;
+.hero-title h1 {
+    font-size: 3rem;
     font-weight: 800;
-    color: var(--primary) !important;
-    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* ===============================
-   🧳 TARJETAS DE VIAJE
-   =============================== */
-.card {
+/* --- BUSCADOR FLOTANTE (Glassmorphism) --- */
+.search-floater {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 1000px;
+    margin: -60px auto 3rem auto; /* Sube para superponerse al Hero */
+    position: relative;
+    z-index: 10;
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.search-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 1rem;
+    align-items: end;
+}
+
+/* Estilo de Inputs y Selects dentro del buscador */
+.custom-input-group label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.custom-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.custom-control:focus {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+/* Botones personalizados */
+.btn-travel-primary {
+    background: var(--primary);
+    color: white;
     border: none;
-    border-radius: var(--radius-md);
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow-sm);
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    height: 48px; /* Para alinear con los inputs */
+    transition: transform 0.2s;
+}
+
+.btn-travel-primary:hover {
+    transform: translateY(-2px);
+    background: #0069d9;
+}
+
+.btn-travel-reset {
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+    background: #fef2f2;
+    border-radius: 12px;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-travel-reset:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* --- GRID DE TARJETAS --- */
+.travel-card {
+    background: white;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-md);
+.travel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
-.card-img-top {
-    height: 230px;
+.card-img-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    transition: transform 0.5s;
 }
 
-/* Overlay suave en imagen */
-.card-img-top::after {
-    content: "";
+.travel-card:hover .card-img-wrapper img {
+    transform: scale(1.05);
+}
+
+.location-tag {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    backdrop-filter: blur(4px);
 }
 
-.card-body {
+.price-float {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: white;
+    color: var(--primary);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-content {
     padding: 1.5rem;
 }
 
-.card-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
+.card-actions {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    gap: 10px;
 }
 
-.card-text {
-    color: var(--muted);
-    font-size: 0.95rem;
+/* Responsive para el buscador */
+@media (max-width: 992px) {
+    .search-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .search-floater {
+        margin: -40px 15px 2rem 15px;
+    }
 }
-
-/* ===============================
-   💰 PRECIO
-   =============================== */
-.travel-price {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--primary);
+@media (max-width: 576px) {
+    .search-grid {
+        grid-template-columns: 1fr;
+    }
 }
+/* --- ESTILOS DASHBOARD / GESTIÓN --- */
 
-/* ===============================
-   📍 BADGE DE DESTINO
-   =============================== */
-.travel-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background-color: rgba(255,255,255,0.95);
-    padding: 0.35rem 0.9rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--primary);
-    box-shadow: var(--shadow-sm);
-}
-
-/* ===============================
-   🔘 BOTONES
-   =============================== */
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border: none;
-    border-radius: 999px;
-    font-weight: 600;
-    padding: 0.7rem 1.8rem;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-outline-success {
-    border-radius: 999px;
-    font-weight: 600;
-}
-
-/* ===============================
-   🔎 FILTROS / FORMULARIOS
-   =============================== */
-.form-control,
-.form-select {
-    border-radius: 999px;
-    padding: 0.75rem 1.2rem;
-    border: 1px solid #e2e8f0;
-    font-size: 0.95rem;
-}
-
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-}
-
-/* ===============================
-   📤 DROPZONE
-   =============================== */
-#drop-zone {
-    border: 2px dashed #cbd5e1 !important;
-    border-radius: var(--radius-md);
-    background-color: #f8fafc;
+/* Cabecera del Dashboard */
+.dashboard-header {
+    background: white;
     padding: 2rem;
-    transition: all 0.3s ease;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-#drop-zone:hover,
-#drop-zone.border-primary {
-    background-color: #eef2ff;
-    border-color: var(--primary) !important;
+/* Contenedor de la lista */
+.admin-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-/* ===============================
-   ⚠ ALERTAS
-   =============================== */
-.alert {
-    border-radius: var(--radius-sm);
-    animation: fadeUp 0.4s ease;
+/* Tarjeta de Fila (Reemplaza al <tr>) */
+.admin-item {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s ease;
 }
 
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
+.admin-item:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Imagen pequeña en la lista */
+.admin-thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Columnas de información */
+.info-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-col.main { flex: 2; }
+.info-col.meta { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.info-col.actions { flex: 1; justify-content: flex-end; align-items: flex-end; }
+
+/* Botón flotante para acciones */
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: 0.2s;
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.action-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.action-btn.delete:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* Responsive para la lista */
+@media (max-width: 768px) {
+    .admin-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .admin-thumb {
+        width: 100%;
+        height: 150px;
     }
+    .info-col.actions {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+}
+/* --- VISTA DETALLE (Airbnb Style) --- */
+
+/* Título y Cabecera */
+.detail-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.02em;
+}
+
+/* Imagen Principal Gigante */
+.detail-gallery-img {
+    width: 100%;
+    height: 500px; /* Altura fija para impacto visual */
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+}
+
+/* Tarjeta de Reserva Flotante (Sticky) */
+.booking-sidebar {
+    position: sticky;
+    top: 100px; /* Se queda pegada al bajar */
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+.booking-price {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+/* Comentarios */
+.comment-card {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s;
+}
+
+.comment-card:hover {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.avatar-circle {
+    width: 45px;
+    height: 45px;
+    background: #e2e8f0;
+    color: #64748b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 991px) {
+    .detail-gallery-img { height: 300px; }
+    .booking-sidebar { position: static; margin-bottom: 2rem; }
 }

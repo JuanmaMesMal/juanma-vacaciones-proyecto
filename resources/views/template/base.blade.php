@@ -16,7 +16,7 @@
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('main.index') }}">
-                <i class="fa-solid fa-plane-departure me-2"></i>@yield('navbar', 'JTRAVEL')
+                <i class="fa-solid fa-plane me-4"></i>@yield('navbar', 'JVIAJES')
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
@@ -51,7 +51,7 @@
                     @auth
                         @if(Auth::user()->isAdvanced())
                             <li class="me-2 nav-item">
-                                <a class="nav-link btn btn-primary text-white" href="{{ route('vacation.create') }}">
+                                <a class="nav-link btn btn-primary text-black" href="{{ route('vacation.create') }}">
                                     <i class="fa-solid fa-plus me-1"></i> Publicar Viaje
                                 </a>
                             </li>

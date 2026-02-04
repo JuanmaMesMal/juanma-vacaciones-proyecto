@@ -2,141 +2,184 @@
 
 @section('content')
 
-@yield('anytitle')
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrando vacation</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+{{-- MODAL (Sin cambios funcionales, solo oculto) --}}
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
-        Estas a punto de eliminar el perfil de este vacation, ¿estás seguro de que lo quieres hacer?
+      <div class="modal-body text-center py-4">
+        <i class="fa-solid fa-triangle-exclamation text-warning fa-3x mb-3"></i>
+        <p class="mb-0">Estás a punto de eliminar este destino vacacional.<br>Esta acción no se puede deshacer.</p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-bs-dismiss="modal">Cerrar</button>
-        <button form="form-delete" type="submit" class="btn btn-danger">Eliminar Perfil</button>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button form="form-delete" type="submit" class="btn btn-danger px-4">Sí, eliminar</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="card border-0 shadow-sm mb-4 p-3 bg-white rounded-4">
-    <form action="{{ $urlDestino }}" method="get" class="row g-3 align-items-end">
-        
-        {{-- Buscador General --}}
-        <div class="col-md-3">
-            <label class="form-label small fw-bold text-muted">Búsqueda</label>
-            <input type="search" name="q" class="form-control" placeholder="¿A dónde vamos?" value="{{ $q }}">
-        </div>
-
-        {{-- Filtro Tipo --}}
-        <div class="col-md-2">
-            <label class="form-label small fw-bold text-muted">Categoría</label>
-            <select name="idtipo" class="form-select">
-                <option value="">Todas</option>
-                @foreach($tipos as $id => $nombre)
-                    <option value="{{ $id }}" {{ $id == $idtipo ? 'selected' : '' }}>{{ $nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        {{-- Selección de Campo para Ordenar --}}
-        <div class="col-md-2">
-            <label class="form-label small fw-bold text-muted">Ordenar por</label>
-            <select name="campo" class="form-select">
-                <option value="titulo" {{ $campo == 'titulo' ? 'selected' : '' }}>Nombre</option>
-                <option value="precio" {{ $campo == 'precio' ? 'selected' : '' }}>Precio</option>
-                @auth
-                  @if(Auth::user()->isAdvanced())
-                    <option value="id" {{ $campo == 'id' ? 'selected' : '' }}>ID</option>
-                  @endif
-                @endauth
-            </select>
-        </div>
-
-        {{-- Dirección de Orden --}}
-        <div class="col-md-2">
-            <label class="form-label small fw-bold text-muted">Dirección</label>
-            <select name="orden" class="form-select">
-                <option value="asc" {{ $orden == 'asc' ? 'selected' : '' }}>Ascendente</option>
-                <option value="desc" {{ $orden == 'desc' ? 'selected' : '' }}>Descendente</option>
-            </select>
-        </div>
-
-        <div class="col-md-3 d-flex gap-2">
-            <button type="submit" class="btn btn-primary w-100 shadow-sm">
-                <i class="fa-solid fa-magnifying-glass me-1"></i> Filtrar
-            </button>
-            <a href="{{ route('main.index') }}" class="btn btn-outline-secondary" title="Limpiar">
-                <i class="fa-solid fa-erasero">Borrar</i>
-            </a>
-        </div>
-    </form>
+<div class="hero-header">
+    <div class="hero-title">
+        @yield('anytitle') 
+        <h1>Encuentra tu paraíso</h1>
+        <p class="lead opacity-75">Explora los mejores destinos al mejor precio</p>
+    </div>
 </div>
 
-<div class="container mt-4">
-  <div class="row">
-    @forelse($vacations as $vacation)
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-              <span class="travel-badge"><i class="fa-solid fa-location-dot me-1"></i> {{ $vacation->pais }}</span>
-              <img class="card-img-top" src="{{ $vacation->foto ? $vacation->foto->getPath() : asset('assets/img/sin-foto.jpg') }}">
-              
-              <div class="card-body p-4">
-                  <h5 class="card-title">{{ $vacation->titulo }}</h5>
-                  <p class="text-muted small mb-3">{{ Str::limit($vacation->descripcion, 80) }}</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                      <div class="travel-price">{{ number_format($vacation->precio, 0) }}€</div>
-                      <a class="badge bg-light text-primary" style="text-decoration: none;" href="{{ route('vacation.tipo', $vacation->idtipo) }}">{{ $vacation->tipo->nombre }}</a>
-                  </div>
-              </div>
-              <div class="card-footer bg-white border-0 pb-4 px-4 d-flex gap-2">
-                  <a href="{{ route('vacation.show', $vacation->id) }}" class="btn btn-sm btn-outline-primary w-100">Detalles</a>
-                  @auth
-                    @if(Auth::user()->isAdvanced())
-                      <a href="{{ route('vacation.edit', $vacation->id) }}" class="btn btn-sm btn-outline-secondary" style="display: flex; gap:.4rem; align-items: center;">
-                        <i class="fa-solid fa-pen"></i>Editar
-                      </a>
-                    @endif
-                  @endauth
-              </div>
-          </div>
-      </div>
-    @empty
-      <p class="text-center w-100">No hay vacaciones registradas.</p>
-    @endforelse
-  </div>
+<div class="container position-relative">
+    
+    <div class="search-floater">
+        <form action="{{ $urlDestino }}" method="get" class="search-grid">
+            
+            {{-- Input Búsqueda --}}
+            <div class="custom-input-group">
+                <label><i class="fa-solid fa-magnifying-glass me-1"></i> Destino</label>
+                <input type="search" name="q" class="custom-control" placeholder="¿A dónde vamos?" value="{{ $q }}">
+            </div>
+
+            {{-- Select Categoría --}}
+            <div class="custom-input-group">
+                <label><i class="fa-regular fa-compass me-1"></i> Tipo</label>
+                <select name="idtipo" class="custom-control">
+                    <option value="">Todas</option>
+                    @foreach($tipos as $id => $nombre)
+                        <option value="{{ $id }}" {{ $id == $idtipo ? 'selected' : '' }}>{{ $nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Select Ordenar --}}
+            <div class="custom-input-group">
+                <label><i class="fa-solid fa-sort me-1"></i> Ordenar</label>
+                <select name="campo" class="custom-control">
+                    <option value="titulo" {{ $campo == 'titulo' ? 'selected' : '' }}>Nombre</option>
+                    <option value="precio" {{ $campo == 'precio' ? 'selected' : '' }}>Precio</option>
+                    @auth
+                      @if(Auth::user()->isAdvanced())
+                        <option value="id" {{ $campo == 'id' ? 'selected' : '' }}>ID</option>
+                      @endif
+                    @endauth
+                </select>
+            </div>
+
+            {{-- Select Dirección --}}
+            <div class="custom-input-group">
+                <label><i class="fa-solid fa-arrow-down-wide-short me-1"></i> Dirección</label>
+                <select name="orden" class="custom-control">
+                    <option value="asc" {{ $orden == 'asc' ? 'selected' : '' }}>Asc</option>
+                    <option value="desc" {{ $orden == 'desc' ? 'selected' : '' }}>Desc</option>
+                </select>
+            </div>
+
+            {{-- Botones de Acción --}}
+            <div class="d-flex gap-2 pb-1">
+                <button type="submit" class="btn-travel-primary w-100">
+                    Buscar
+                </button>
+                <a href="{{ route('main.index') }}" class="btn-travel-reset" title="Limpiar filtros">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    {{-- 3. GRID DE RESULTADOS  --}}
+    <div class="row g-4 mb-5">
+        @forelse($vacations as $vacation)
+            <div class="col-md-6 col-lg-4">
+                <article class="travel-card h-100 d-flex flex-column">
+                    
+                    {{-- Imagen con badges --}}
+                    <div class="card-img-wrapper">
+                        <span class="location-tag">
+                            <i class="fa-solid fa-earth-americas me-1"></i> {{ $vacation->pais }}
+                        </span>
+                        
+                        <img src="{{ $vacation->foto ? $vacation->foto->getPath() : asset('assets/img/sin-foto.jpg') }}" alt="{{ $vacation->titulo }}">
+                        
+                        <div class="price-float">
+                            {{ number_format($vacation->precio, 0) }}€
+                        </div>
+                    </div>
+                    
+                    {{-- Cuerpo de la tarjeta --}}
+                    <div class="card-content flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold mb-0 text-dark">{{ $vacation->titulo }}</h5>
+                            <a href="{{ route('vacation.tipo', $vacation->idtipo) }}" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none rounded-pill px-3">
+                                {{ $vacation->tipo->nombre }}
+                            </a>
+                        </div>
+                        <p class="text-muted small mb-0" style="line-height: 1.6;">
+                            {{ Str::limit($vacation->descripcion, 90) }}
+                        </p>
+                    </div>
+
+                    {{-- Footer de acciones --}}
+                    <div class="card-actions">
+                        <a href="{{ route('vacation.show', $vacation->id) }}" class="btn btn-outline-primary btn-sm rounded-pill flex-grow-1 fw-bold">
+                            Ver Detalles
+                        </a>
+                        
+                        @auth
+                            @if(Auth::user()->isAdvanced())
+                                <a href="{{ route('vacation.edit', $vacation->id) }}" class="btn btn-light btn-sm rounded-circle text-secondary" title="Editar">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-light btn-sm rounded-circle text-danger" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal" 
+                                        data-href="{{ route('vacation.destroy', $vacation->id) }}" {{-- Asumo ruta destroy estándar --}}
+                                        title="Eliminar">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            @endif
+                        @endauth
+                    </div>
+
+                </article>
+            </div>
+        @empty
+            <div class="col-12 text-center py-5">
+                <div class="text-muted opacity-50 mb-3">
+                    <i class="fa-solid fa-plane-slash fa-4x"></i>
+                </div>
+                <h3>No hemos encontrado destinos</h3>
+                <p class="text-muted">Intenta ajustar tus filtros de búsqueda.</p>
+            </div>
+        @endforelse
+    </div>
+
+    {{-- 4. PAGINACIÓN --}}
+    <div class="d-flex justify-content-center pb-5">
+        {{ $vacations->onEachSide(2)->links() }}
+    </div>
+
 </div>
 
-    <form id="form-delete" action="" method="post">
-        @csrf
-        @method('DELETE')
-    </form>
-</div>
-
-<div class="d-flex justify-content-center mt-5">
-    {{ $vacations->onEachSide(2)->links() }}
-</div>
+{{-- Formulario oculto para el delete --}}
+<form id="form-delete" action="" method="post">
+    @csrf
+    @method('DELETE')
+</form>
 
 @endsection
 
 @section('scripts')
   <script>
-      // Espera a que el documento HTML esté completamente cargado
       document.addEventListener('DOMContentLoaded', function () {
-          // Selecciona todos los botones que abren el modal de borrado
           const deleteButtons = document.querySelectorAll('[data-bs-target="#deleteModal"]');
-          // Selecciona el formulario que se usará para enviar la petición DELETE
           const formDelete = document.getElementById('form-delete');
 
-          // Recorre cada botón de "delete"
           deleteButtons.forEach(button => {
-              // Añade un listener para cuando se haga clic en él
               button.addEventListener('click', function () {
-                  // Cuando se hace clic, obtiene la URL guardada en el atributo 'data-href' del botón específico     
+                  // OJO: Asegúrate de que tus botones de borrar tengan el atributo data-href con la ruta
                   const action = this.getAttribute('data-href');
-                  // Asigna esa URL específica al atributo 'action' del formulario de borrado
                   formDelete.setAttribute('action', action);
               });
           });
