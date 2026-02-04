@@ -9,7 +9,6 @@ class Reserva extends Model
 {
     protected $table = 'reserva';
 
-    //los campos que se rellenan manualmente
     protected $fillable = [
         'idvacation',
         'iduser',

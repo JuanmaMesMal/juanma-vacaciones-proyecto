@@ -13,7 +13,6 @@ class ReservaController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // 1. Validación básica
         $request->validate([
             'idvacation' => 'required|exists:vacation,id',
         ]);
@@ -21,7 +20,6 @@ class ReservaController extends Controller
         $idvacation = $request->idvacation;
         $iduser = Auth::id();
 
-        // 2. Seguridad: Verificar si el viaje ya está reservado por CUALQUIER usuario
         $yaReservado = Reserva::where('idvacation', $idvacation)->exists();
 
         if ($yaReservado) {
@@ -30,7 +28,6 @@ class ReservaController extends Controller
             ]);
         }
 
-        // 3. Crear la reserva
         try {
             Reserva::create([
                 'idvacation' => $idvacation,
@@ -48,7 +45,6 @@ class ReservaController extends Controller
 
     public function destroy(Reserva $reserva): RedirectResponse
     {
-        // Seguridad: Solo el dueño de la reserva puede cancelarla
         if ($reserva->iduser !== Auth::id()) {
             return back()->withErrors(['general' => 'No tienes permiso para cancelar esta reserva.']);
         }

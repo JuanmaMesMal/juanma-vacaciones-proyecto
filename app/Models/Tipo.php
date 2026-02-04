@@ -9,7 +9,6 @@ class Tipo extends Model
 {
     protected $table = 'tipo';
 
-    //los campos que se rellenan manualmente
     protected $fillable = [
         'nombre',
     ];

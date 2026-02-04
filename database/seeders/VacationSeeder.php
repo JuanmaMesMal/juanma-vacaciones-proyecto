@@ -19,7 +19,6 @@ class VacationSeeder extends Seeder
             $pais = $paises[array_rand($paises)];
             
             $vacation = Vacation::create([
-                // Corregido: Ahora el título incluye el número $i para ser único
                 'titulo' => "Increíble viaje a $pais #$i", 
                 'descripcion' => "Descubre los secretos de $pais en este tour exclusivo. Incluye todo lo necesario para tu confort.",
                 'precio' => rand(500, 4500),

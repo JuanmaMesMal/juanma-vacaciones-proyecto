@@ -6,7 +6,7 @@ use App\Models\Comentario;
 
 class SentComentario {
 
-    private $comentarios = []; // Plural
+    private $comentarios = []; 
 
     public function addComentario(Comentario $comentario): void {
         if (!in_array($comentario->id, $this->comentarios)) {
@@ -18,7 +18,6 @@ class SentComentario {
         return in_array($comentario->id, $this->comentarios);
     }
 
-    // Añade esta función para que el DEBUG funcione
     public function getIds(): array {
         return $this->comentarios;
     }

@@ -28,7 +28,7 @@ class VacationController extends Controller
     }
 
     function index(): View {
-        $vacation = Vacation::all();//select * from vacation;
+        $vacation = Vacation::all();
         $array = ['vacations' => $vacation];
         return view('vacation.index', $array);
     }
@@ -44,17 +44,13 @@ class VacationController extends Controller
         $message = '';
 
         try {
-            // 1. Guardar la vacación primero para obtener su ID
             $vacation = new Vacation($request->validated());
             $result = $vacation->save();
 
-            // 2. Si se guardó correctamente, gestionamos la imagen con la función upload
             if ($result && $request->hasFile('image')) {
                 
-                // Llamamos a tu función privada pasándole el ID recién creado
                 $path = $this->upload($request, $vacation->id);
 
-                // 3. Si upload devolvió una ruta válida, guardamos en la tabla 'foto'
                 if ($path) {
                     Foto::create([
                         'idvacation' => $vacation->id,
@@ -83,7 +79,7 @@ class VacationController extends Controller
             : back()->withInput()->withErrors($messageArray);
     }
 
-    private function upload($request, $id) { // Quitamos el typehint Request si da conflicto con tu VacationCreateRequest
+    private function upload($request, $id) { 
         if (!$request->hasFile('image')) {
             return null;
         }
@@ -94,11 +90,8 @@ class VacationController extends Controller
             return null;
         }
 
-        // Generamos el nombre: "ID.extension" (ej: 2.png)
         $fileName = $id . '.' . $image->getClientOriginalExtension();
         
-        // Guardamos usando storeAs para forzar el nombre legible
-        // Se guardará en storage/app/public/images/
         return $image->storeAs('images', $fileName, 'public');
     }
 
@@ -109,31 +102,24 @@ class VacationController extends Controller
 
     public function update(VacationEditRequest $request, Vacation $vacation): RedirectResponse {
         try {
-            // 1. Actualizar los campos básicos de la vacación
             $vacation->update($request->validated());
 
-            // Buscamos si ya tiene una foto asociada
             $foto = Foto::where('idvacation', $vacation->id)->first();
 
-            // 2. Si el usuario marcó "eliminar imagen"
             if ($request->has('delete_image') && $foto) {
                 if (Storage::disk('public')->exists($foto->path)) {
                     Storage::disk('public')->delete($foto->path);
                 }
-                $foto->delete(); // Borramos el registro de la tabla foto
+                $foto->delete(); 
             }
 
-            // 3. Si se sube una nueva imagen
             if ($request->hasFile('image')) {
-                // Borramos la imagen física anterior si existía
                 if ($foto && Storage::disk('public')->exists($foto->path)) {
                     Storage::disk('public')->delete($foto->path);
                 }
 
-                // Usamos tu función upload para guardar la nueva
                 $newPath = $this->upload($request, $vacation->id);
 
-                // Actualizamos o creamos el registro en la tabla 'foto'
                 if ($foto) {
                     $foto->update(['path' => $newPath]);
                 } else {
@@ -154,19 +140,9 @@ class VacationController extends Controller
     }
 
     function show(Vacation $vacation): View {
-        // $asignaturas = Asignatura::all();
-        // $SentObservacion = session()->get('SentObservacion');
-        // if($SentObservacion == null) {
-        //     $SentObservacion = new SentObservacion();
-        //     session()->put('SentObservacion', $SentObservacion);
-        // }
+
         $year = Carbon::now()->year;
-        // return view('vacation.show', [
-        //     'asignaturas'     => $asignaturas, 
-        //     'vacation'        => $vacation, 
-        //     'year'            => $year, 
-        //     'SentObservacion' => $SentObservacion]);
-        
+
         return view('vacation.show', [
             'vacation'        => $vacation, 
             'year'            => $year,]);
@@ -174,19 +150,15 @@ class VacationController extends Controller
 
     function destroy(Vacation $vacation) {
        try {
-            // busco si tiene una foto asociada
             $foto = Foto::where('idvacation', $vacation->id)->first();
 
             if ($foto) {
-                // 2. Borrar el archivo físico del disco 'public'
                 if (Storage::disk('public')->exists($foto->path)) {
                     Storage::disk('public')->delete($foto->path);
                 }
-                // 3. Borrar el registro en la tabla 'foto'
                 $foto->delete();
             }
 
-            // 4. Ahora ya podemos borrar la vacación sin errores de dependencia
             $result = $vacation->delete();
             $message = 'El anuncio y su imagen han sido eliminados correctamente.';
         } catch(\Exception $e) {

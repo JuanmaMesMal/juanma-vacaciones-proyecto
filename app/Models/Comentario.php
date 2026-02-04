@@ -9,7 +9,6 @@ class Comentario extends Model
 {
     protected $table = 'comentario';
 
-    //los campos que se rellenan manualmente
     protected $fillable = [
         'iduser',
         'idvacation',

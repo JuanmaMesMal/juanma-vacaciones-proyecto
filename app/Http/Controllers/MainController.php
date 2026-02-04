@@ -50,7 +50,6 @@ class MainController extends Controller
             $query->where('idtipo', '=', $idtipo);
         }
 
-        // Búsqueda General (Subconsulta como en tu ejemplo)
         if($q != null) {
             $query->where(function($sq) use ($q) {
                 $sq->where('titulo', 'like', '%' . $q . '%')
@@ -61,18 +60,15 @@ class MainController extends Controller
             });
         }
 
-        // 3. Ordenación dinámica
-        // Si el campo es descripción (texto largo), podríamos usar orderByRaw como en tu ejemplo
+       
         if($campo == 'descripcion') {
             $query->orderByRaw("char_length(descripcion) $orden");
         } else {
             $query->orderBy($campo, $orden);
         }
 
-        // 4. Paginación manteniendo los filtros
         $vacations = $query->paginate(6)->withQueryString();
         
-        // Obtener tipos para el select (pluck devuelve formato [id => nombre])
         $tipos = Tipo::pluck('nombre', 'id');
 
         return view('main.index', [

@@ -18,7 +18,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth'])->group(function () { // para que solo los usarios logueados puedan reservar
+Route::middleware(['auth'])->group(function () { // Usuarios puedan reservar 
     Route::post('/reserva', [ReservaController::class, 'store'])->name('reserva.store');
     Route::delete('/reserva/{reserva}', [ReservaController::class, 'destroy'])->name('reserva.destroy');
 });

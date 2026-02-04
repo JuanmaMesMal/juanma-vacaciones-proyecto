@@ -12,7 +12,6 @@ class Vacation extends Model
 {
     protected $table = 'vacation';
 
-    //los campos que se rellenan manualmente
     protected $fillable = [
         'titulo',
         'descripcion',

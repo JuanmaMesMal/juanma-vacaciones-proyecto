@@ -2,7 +2,6 @@
 
 @section('content')
 
-{{-- MODAL (Sin cambios funcionales, solo oculto) --}}
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow">
@@ -87,7 +86,7 @@
         </form>
     </div>
 
-    {{-- 3. GRID DE RESULTADOS  --}}
+    {{--  GRID DE RESULTADOS  --}}
     <div class="row g-4 mb-5">
         @forelse($vacations as $vacation)
             <div class="col-md-6 col-lg-4">
